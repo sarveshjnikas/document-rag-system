@@ -1,11 +1,12 @@
 # pipeline/query.py
-from retrieval.retriever import retrieve
-from generation.prompt import build_prompt
-from generation.llm import generate
 import config
 
+from generation.llm import generate
+from generation.prompt import build_prompt
+from retrieval.retriever import retrieve
+
 def answer(query: str) -> dict:
-    chunks = retrieve(query, k=max(config.TOP_K, 15))
+    chunks = retrieve(query, k=config.TOP_K)
     messages = build_prompt(query, chunks)
     response = generate(messages)
     return {
