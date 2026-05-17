@@ -28,6 +28,7 @@ Prompt builder — assembles the final prompt: a system instruction, the retriev
 LLM — reads the assembled prompt and generates an answer in natural language. Because the relevant text is right there in the context window, it doesn't have to rely on memorised training data, which is why RAG reduces hallucinations.
 
 Answer — the final response.
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         INGESTION PIPELINE                              │
 │                                                                         │
@@ -85,3 +86,4 @@ Answer — the final response.
 │                                        │   Answer    │               │
 │                                        └─────────────┘               │
 └────────────────────────────────────────────────────────────────────────┘
+```
