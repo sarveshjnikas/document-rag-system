@@ -6,7 +6,7 @@ import os
 
 
 def test_build_store(tmp_path):
-    chunks = split_documents(load_document("tests/fixtures/sample.txt"))
+    chunks = split_documents(load_document("tests/fixtures/fees_structure_2026_admission_ug_pg.pdf"))
 
     def fake_embed(texts: list[str]) -> list[list[float]]:
         out = []

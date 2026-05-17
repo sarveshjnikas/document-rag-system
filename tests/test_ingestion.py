@@ -2,7 +2,7 @@ from ingestion.loader import load_document
 from ingestion.splitter import split_documents
 
 def test_load_and_split():
-    docs = load_document("tests/fixtures/sample.txt")
+    docs = load_document("tests/fixtures/fees_structure_2026_admission_ug_pg.pdf")
     assert len(docs) > 0
 
     chunks = split_documents(docs)
