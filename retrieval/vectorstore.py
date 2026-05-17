@@ -45,6 +45,12 @@ def build_store(
 
     faiss.write_index(index, vector_store_faiss_path)
 
+    # Keep SQLite rows aligned with FAISS vector ids (0..N-1).
+    # If we append to an existing DB, ids drift and retrieval will fetch the wrong text.
+    db_file = Path(metadata_db_path)
+    if db_file.exists():
+        db_file.unlink()
+
     con = sqlite3.connect(metadata_db_path)
 
     con.execute(
