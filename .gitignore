@@ -9,3 +9,8 @@ work.ipynb
 # editor (commit settings, ignore the rest)
 .vscode/*
 !.vscode/settings.json
+
+# local artifacts
+store/
+docs/*.pdf
+plan.txt
