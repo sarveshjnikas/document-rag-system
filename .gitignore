@@ -1,2 +1,11 @@
 # environment
 .env
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+work.ipynb
+
+# editor (commit settings, ignore the rest)
+.vscode/*
+!.vscode/settings.json
