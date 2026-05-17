@@ -1,7 +1,0 @@
-Document QnA sample text.
-
-This is paragraph one. It exists to validate that the loader returns real text and that chunking produces reasonable chunks.
-
-This is paragraph two. It is intentionally a bit longer so the splitter has more material to work with. The goal is not correctness of content, only that the pipeline produces chunks that look like natural language.
-
-This is paragraph three. You can replace this file with your own documents later.
