@@ -107,3 +107,51 @@ Answer — the final response.
 │                                        └─────────────┘               │
 └────────────────────────────────────────────────────────────────────────┘
 ```
+
+## Run It
+
+### 1) Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Set your API key (either in `.env` or your shell):
+
+```bash
+export OPENAI_API_KEY="YOUR_KEY_HERE"
+```
+
+### 2) Ingest (build the store)
+
+This creates/overwrites `store/index.faiss` and `store/metadata.db`.
+
+```bash
+python -m pipeline.ingest tests/fixtures/fees_structure_2026_admission_ug_pg.pdf
+```
+
+### 3) Run the API
+
+```bash
+uvicorn api.main:app --reload
+```
+
+Open:
+- `http://127.0.0.1:8000/docs` (Swagger UI)
+- `http://127.0.0.1:8000/health`
+
+### 4) Ask a question
+
+```bash
+curl -s -X POST "http://127.0.0.1:8000/query" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"What are the fees for MBA for foreign nationals?"}'
+```
+
+### 5) Run tests
+
+```bash
+pytest -q
+```
