@@ -52,8 +52,12 @@ def retrieve(query: str, *, k: int | None = None) -> list[dict]:
         results: list[dict] = []
         seen_texts: set[str] = set()
 
-        for score, idx in zip(scores[0], ids[0]):
-            row = con.execute("SELECT text, meta FROM chunks WHERE id=?", (int(idx) + 1,)).fetchone()
+        for score, chunk_id in zip(scores[0], ids[0]):
+            if int(chunk_id) < 0:
+                continue
+            row = con.execute(
+                "SELECT text, meta FROM chunks WHERE id=?", (int(chunk_id),)
+            ).fetchone()
             if not row:
                 continue
             text, meta_json = row
