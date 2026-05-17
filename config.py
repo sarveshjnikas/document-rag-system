@@ -10,3 +10,4 @@ CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
 VECTOR_STORE_PATH = "store/index"
 METADATA_DB_PATH = "store/metadata.db"
+TOP_K = 5
