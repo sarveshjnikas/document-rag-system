@@ -1,19 +1,39 @@
-The primary goal of this project is to learn about RAG systems, vector databases, and adjascent concepts while building a (hopefully) useful project.
+# Document QnA (RAG)
 
-Problem:
-If we have a huge pile of documents — hundreds of PDFs, articles, notes. An LLM on its own can't read all of them (too long, and it forgets them after the conversation ends). So we need a smarter approach.
+Learn RAG systems and vector databases by building a small document Q&A project.
 
-Part 1: Prepare the library (ingestion). We do this once, upfront.
-Take every document, cut it into small chunks (like paragraphs), and for each chunk you run it through an embedding model — which converts text into a list of numbers (a "vector") that captures its meaning. All these vectors get stored in a vector store — basically a database optimised for finding similar vectors fast.
+## Problem
 
-Part 2: Answer a question (query). This happens every time a user asks something.
-Take the user's question, run it through the exact same embedding model to get its vector, then search the vector store for the chunks whose vectors are closest — these are the most relevant passages. You then stuff those passages + the original question into a prompt and hand it to the LLM. The LLM reads the pasted-in context and writes an answer grounded in it.
+If we have a huge pile of documents—hundreds of PDFs, articles, notes—an LLM on its own can’t read all of them (too long, and it forgets them after the conversation ends). So we need a smarter approach.
 
-The flow diagram would look something like:
+## Approach
 
-Documents — the raw source files you feed in.
+### Part 1: Prepare the library (ingestion)
 
-Document loader — reads those files and extracts plain text plus metadata (filename, page number, URL). Handles format differences so the rest of the pipeline sees clean, uniform text regardless of the source.
+Do this once, upfront:
+- Take each document and split it into small chunks (like paragraphs).
+- Run each chunk through an embedding model to convert text into a vector (a list of numbers capturing meaning).
+- Store all vectors in a vector store (optimized for fast similarity search).
+
+### Part 2: Answer a question (query)
+
+This happens every time a user asks something:
+- Embed the user’s question using the **same** embedding model.
+- Search the vector store for the closest chunk vectors (most relevant passages).
+- Provide the retrieved passages + the question to the LLM so it answers grounded in the documents.
+
+## Components (at a glance)
+
+- **Documents** — raw source files you feed in.
+- **Document loader** — reads files and extracts plain text + metadata (filename, page, URL).
+- **Text splitter** — breaks long documents into smaller overlapping chunks.
+- **Embedding model** — converts text to vectors (used at ingestion and query time; must match).
+- **Vector store** — stores vectors and supports nearest-neighbor search (FAISS / Pinecone / Weaviate).
+- **Retriever** — returns top‑k chunks most similar to the query vector (cosine similarity).
+- **Prompt builder** — assembles system instruction + retrieved context + question.
+- **LLM** — generates the final answer using the provided context (reduces hallucinations).
+
+## Flow Diagram
 
 Text splitter — breaks long documents into smaller overlapping chunks. Overlap ensures no sentence gets stranded at a boundary. Smaller chunks are what the embedding model and retrieval step actually operate on.
 
