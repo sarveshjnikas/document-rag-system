@@ -9,7 +9,7 @@ def query(req: QueryRequest):
     result = answer(req.query)
     return QueryResponse(
         answer=result["answer"],
-        sources=[{"text": s["text"], "score": s["score"]} for s in result["sources"]],
+        sources=result["sources"],
     )
 
 @app.get("/health")

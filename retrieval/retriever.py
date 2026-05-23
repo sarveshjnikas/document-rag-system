@@ -16,7 +16,6 @@ def _keyword_candidates(con: sqlite3.Connection, query: str, limit: int) -> list
     if not tokens:
         return []
 
-    # Pull candidate chunks by lexical match; keep it simple and small.
     like_clauses = " OR ".join(["lower(text) LIKE ?"] * min(len(tokens), 8))
     params = [f"%{t}%" for t in tokens[:8]]
     sql = f"SELECT id, text, meta FROM chunks WHERE {like_clauses} LIMIT ?"
@@ -72,7 +71,6 @@ def retrieve(query: str, *, k: int | None = None) -> list[dict]:
                 }
             )
 
-        # Hybrid fallback: add a few lexical matches to help with tables / rare keywords.
         for cand in _keyword_candidates(con, query, limit=max(5, k)):
             if cand["text"] in seen_texts:
                 continue
@@ -81,7 +79,6 @@ def retrieve(query: str, *, k: int | None = None) -> list[dict]:
                 {
                     "text": cand["text"],
                     "meta": cand["meta"],
-                    # keep FAISS scores and keyword scores comparable by labeling keyword hits low.
                     "score": float(-1.0 * cand["score"]),
                 }
             )

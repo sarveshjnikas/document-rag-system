@@ -75,8 +75,6 @@ def build_store(
     con = _open_db(metadata_db_path)
     try:
         start_id = _next_chunk_id(con)
-
-        # Embed in batches to avoid huge requests.
         vectors: list[list[float]] = []
         for i in range(0, len(texts), 100):
             vectors.extend(embed_fn(texts[i : i + 100]))
