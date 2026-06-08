@@ -24,13 +24,15 @@ def _keyword_candidates(con: sqlite3.Connection, query: str, limit: int) -> list
     results: list[dict] = []
     for chunk_id, text, meta_json in rows:
         text_l = text.lower()
-        score = sum(1 for t in tokens if t in text_l)
+        matches = sum(1 for t in tokens if t in text_l)
+        # normalize to 0-1 by dividing by total token count
+        score = matches / len(tokens)
         results.append(
             {
                 "id": int(chunk_id),
                 "text": text,
                 "meta": json.loads(meta_json) if meta_json else {},
-                "score": float(score),
+                "score": score,
             }
         )
     results.sort(key=lambda r: r["score"], reverse=True)
@@ -42,11 +44,11 @@ def retrieve(query: str, *, k: int | None = None) -> list[dict]:
     index = faiss.read_index(config.VECTOR_STORE_PATH + ".faiss")
 
     q_vec = np.array(embed_texts([query]), dtype="float32")
-    faiss.normalize_L2(q_vec)
+    faiss.normalize_L2(q_vec) # normalise the vector
 
-    scores, ids = index.search(q_vec, k)
+    scores, ids = index.search(q_vec, k) # search the index and return scores and relevnat chunk id from sql-lite
 
-    con = sqlite3.connect(config.METADATA_DB_PATH)
+    con = sqlite3.connect(config.METADATA_DB_PATH) # for chunk text and metadata
     try:
         results: list[dict] = []
         seen_texts: set[str] = set()
@@ -79,7 +81,7 @@ def retrieve(query: str, *, k: int | None = None) -> list[dict]:
                 {
                     "text": cand["text"],
                     "meta": cand["meta"],
-                    "score": float(-1.0 * cand["score"]),
+                    "score": cand["score"],
                 }
             )
 
