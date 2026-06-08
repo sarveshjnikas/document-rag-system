@@ -6,6 +6,7 @@ class QueryRequest(BaseModel):
 class Source(BaseModel):
     text: str
     score: float
+    meta: dict = {}
 
 class QueryResponse(BaseModel):
     answer: str
