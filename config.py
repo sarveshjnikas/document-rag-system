@@ -1,13 +1,17 @@
 # config.py
 from dotenv import load_dotenv
+from pathlib import Path
 import os
+
 load_dotenv()
+
+BASE_DIR = Path(__file__).parent
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 LLM_MODEL = "gpt-4o-mini"
 EMBEDDING_MODEL = "text-embedding-3-small"
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
-VECTOR_STORE_PATH = "store/index"
-METADATA_DB_PATH = "store/metadata.db"
+VECTOR_STORE_PATH = str(BASE_DIR / "store" / "index")
+METADATA_DB_PATH = str(BASE_DIR / "store" / "metadata.db")
 TOP_K = 5
