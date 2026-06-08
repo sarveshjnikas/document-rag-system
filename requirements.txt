@@ -8,5 +8,4 @@ pypdf
 python-dotenv
 fastapi
 uvicorn
-sqlite-utils
 pytest
